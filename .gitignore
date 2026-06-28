@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# macOS
+.DS_Store
+
+# 本地快照仓库 (不该进 git, 文件大且含个人对话)
+.codex-snapshots/
+codex-snapshots/
+
+# 本地临时文件
+*.tmp
+*.bak
+*.bak-*
+
+# 敏感: 防止误把含 token 的真实 config 推上去
+config.toml
+auth.json
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo

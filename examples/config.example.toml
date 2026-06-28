@@ -1,0 +1,108 @@
+# ~/.codex/config.toml 示例
+#
+# Codex.app 桌面应用启动时读这个文件 (位置硬编码 $CODEX_HOME/config.toml,
+# 默认 $CODEX_HOME = ~/.codex)。
+#
+# 三类典型配置:
+#   1. 用 ChatGPT 账号 OAuth (默认场景, 不指定 provider, 让 Codex 走自己后端)
+#   2. 用第三方 OpenAI-兼容 API (示例: 公司内部 Model 平台 / OpenRouter / Together)
+#   3. 用 Anthropic Bedrock 通过 ANTHROPIC_BASE_URL 环境变量 (Claude Code 集成场景)
+#
+# 本示例同时演示 1 + 2 (注释掉切换), 把 model_provider 那块写在最顶上方便切换。
+
+# ============================================================
+# 选 1. ChatGPT OAuth (默认,B 账号正常用法)
+# ============================================================
+# 不指定 model_provider 和 model, Codex 默认走 OpenAI 后端 GPT 模型。
+# auth.json 里的 OAuth token 决定身份。
+
+# ============================================================
+# 选 2. 公司内部 Model 平台(示例,把下面块去掉注释启用)
+# ============================================================
+# 这个 provider 会让 Codex 走 https://your-gateway.example.com/v1 的 OpenAI 兼容 API,
+# 用 experimental_bearer_token 做认证, 完全绕过 OpenAI 官方 OAuth。
+# (注意: 本示例的 token 是随机假值, 用你自己的)
+
+# model_provider = "my_proxy"
+# model = "gpt-5.5"
+# model_reasoning_effort = "medium"
+# disable_response_storage = true
+# model_context_window = 1000000
+# model_auto_compact_token_limit = 900000
+# model_catalog_json = "/Users/you/.codex/my-model-catalog.json"
+#
+# [model_providers.my_proxy]
+# base_url = "https://your-gateway.example.com/v1"
+# experimental_bearer_token = "YOUR-GATEWAY-TOKEN"
+# name = "Model 平台"
+# wire_api = "responses"
+
+# ============================================================
+# 全局: 行为开关 (跟 provider 无关, 哪种都建议设)
+# ============================================================
+notify = ["turn-ended"]
+personality = "pragmatic"
+approval_policy = "never"          # 不每条都问, 适合熟手
+sandbox_mode = "danger-full-access" # 完整访问, 适合本地 dev
+
+[features]
+js_repl = false
+memories = true
+
+[memories]
+disable_on_external_context = true
+generate_memories = true
+use_memories = true
+
+# ============================================================
+# 集成: shell 子进程的环境变量
+# ============================================================
+# 当 Codex 跑 shell 工具时, 这些环境变量会注入。
+# 例如让子进程访问 AWS Bedrock 用 Claude:
+[shell_environment_policy]
+inherit = "core"
+
+[shell_environment_policy.set]
+HTTPS_PROXY = "http://proxy-aws-us.example.com:8118"
+HTTP_PROXY = "http://proxy-aws-us.example.com:8118"
+# Claude Code 走 Bedrock 的话:
+# ANTHROPIC_BASE_URL = "https://bedrock-runtime.us-west-2.amazonaws.com"
+# CLAUDE_CODE_USE_BEDROCK = "1"
+# AWS_PROFILE = "claude-code"
+# AWS_REGION = "us-west-2"
+
+# ============================================================
+# 项目: 给某些路径标 trusted 防权限弹窗
+# ============================================================
+# [projects."/Users/yourname/Documents/项目周报"]
+# trust_level = "trusted"
+#
+# [projects."/Users/yourname/Desktop/Codex"]
+# trust_level = "trusted"
+
+# ============================================================
+# MCP servers: 注册外部 MCP 让 Codex 在对话里用
+# ============================================================
+# 例 1: HTTP 类 MCP (远程 API)
+# [mcp_servers."my-bigdata-mcp"]
+# url = "https://my-mcp.example.com/mcp"
+# [mcp_servers."my-bigdata-mcp".http_headers]
+# Authorization = "Bearer YOUR-TOKEN-HERE"
+#
+# 例 2: stdio 类 MCP (本地 npx)
+# [mcp_servers."my-mcp"]
+# command = "npx"
+# args = ["-y", "some-mcp-package@latest"]
+#
+# 例 3: stdio 类 MCP (本地 Python venv)
+# [mcp_servers."local-py-mcp"]
+# command = "/path/to/.venv/bin/python"
+# args = ["-m", "my_mcp_service.server"]
+
+# ============================================================
+# 备注
+# ============================================================
+# - account-switch 工具会改 sessions/*.jsonl 第一行的 model_provider,
+#   要跟这里的 model_provider 字段保持一致(默认 'openai')。
+# - 如果你切回公司 Model 平台 (my_proxy), 记得 account-switch
+#   时传 `--provider my_proxy` 让 jsonl 和 sqlite 都对齐。

@@ -1,0 +1,16 @@
+# ccc-syn-skill — environment dependencies
+#
+# 本 skill 的所有脚本仅依赖 Python 标准库，无需 pip 安装任何第三方包。
+# This skill uses ONLY the Python standard library — no third-party pip packages.
+#
+# Runtime prerequisites (运行前置，非 pip 依赖):
+#   - Python >= 3.9   (开发/验证于 Python 3.14.3)
+#   - macOS（脚本按 macOS 的 ~/.codex 与 ~/.claude 目录布局编写）
+#   - Codex 桌面版（路径默认为 /Applications/Codex.app/Contents/Resources/codex）
+#       * codex-import/ 下的导入管线通过 `codex app-server --stdio` JSON-RPC 工作
+#       * 运行导入/重置时 Codex 必须完全退出（脚本内含 ensure_quit 校验）
+#   - Cursor（读取其会话历史与 globalStorage/state.vscdb）
+#
+# 标准库用到的模块（仅供参考，无需安装）:
+#   argparse, dataclasses, datetime, hashlib, json, os, pathlib,
+#   random, re, shutil, sqlite3, subprocess, sys, threading, time, typing, uuid

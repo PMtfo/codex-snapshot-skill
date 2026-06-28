@@ -1,0 +1,53 @@
+---
+description: Decision-tree handoff for Cursor, Claude Code, Codex transcripts and Codex imports
+alwaysApply: true
+---
+
+# ccc-syn 决策树
+
+当用户提到读取历史对话、加载会话、接着某个任务继续，或把对话导入 Codex 时，按下面决策树执行。脚本根目录：`/Users/you/.cursor/agent-shared/skills/ccc-syn-skill`。
+
+## 1. 先判断用户意图
+
+### A. 读取对话继续任务
+
+用户想“读某端对话 / 按标题或 ID 加载对话 / 接着那个任务继续”。
+
+继续确认两件事：
+
+1. 目标应用：`cursor`、`claude/cc/claudecode`、还是 `codex`。
+2. 定位信息：对话标题、关键词或对话 ID。
+
+命令：
+
+```bash
+python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/cursor_transcript.py search "<标题或关键词或uuid>" --limit 5
+python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/claude_transcript.py search "<标题或关键词或session-id>" --limit 5
+python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/codex_transcript.py  search "<标题或关键词或session-id>" --limit 5
+```
+
+唯一强命中后 load；多个候选先让用户选择。不要把 `<...>` 占位符原样执行。
+
+### B. 批量导入对话到 Codex
+
+用户想“导入 Cursor/Claude 对话到 Codex / 增量同步 / 导入近一周 / 全部导入”。
+
+继续确认：
+
+1. 来源：`cursor`、`claude/cc`、还是 `both`。
+2. 模式：全部重导入，还是增量导入。
+3. 保存/显示路径：导入后的对话要放到哪个 Codex 工作区路径（cwd）。
+4. 路径确认：该路径是不是 Codex 正在使用的工作区；用户未确认前不要真实导入，只能 dry-run。
+5. 条件：是否有 `--since`、`--from-date`、`--to-date`、`--title`。
+
+唯一推荐入口（Codex 必须完全退出后才能真实导入；dry-run 可直接跑）：
+
+```bash
+cd /Users/you/.cursor/agent-shared/skills/ccc-syn-skill
+python3 codex-import/codex-planB-run.py dry-run --source cursor --since 7d --incremental --codex-cwd "/Users/you/Desktop/Codex"
+python3 codex-import/codex-planB-run.py import --source cursor --since 7d --incremental --codex-cwd "/Users/you/Desktop/Codex"
+python3 codex-import/codex-planB-run.py import --source claude --incremental --codex-cwd "/Users/you/Desktop/Codex"
+python3 codex-import/codex-planB-run.py all --source both --codex-cwd "/Users/you/Desktop/Codex"
+```
+
+导入语义：复用原端标题；按源更新时间从旧到新提交，Codex 侧栏倒序显示时新对话在上；过滤 `1`、`测试`、`你好1`、`请回复ok`、`ping`、测网速/连接性测试等低价值记录。

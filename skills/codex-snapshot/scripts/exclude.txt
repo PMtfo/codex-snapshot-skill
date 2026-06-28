@@ -1,0 +1,51 @@
+# 登录态：强制不进快照（恢复后用新账号重新登录 Codex 本体）
+auth.json
+
+# 本地索引/缓存：Codex 启动时会从 sessions/*.jsonl 重建,
+# 跨账号、跨快照都要让 Codex 自己 backfill,不能用旧账号的索引覆盖
+state_5.sqlite
+state_5.sqlite-shm
+state_5.sqlite-wal
+cache
+cache/
+session_index.jsonl
+sqlite
+sqlite/
+
+# SQLite 边车（backup API 已生成纯净副本，不需要原始 wal/shm）
+*.sqlite-shm
+*.sqlite-wal
+
+# Codex 自身写的 .bak 系列临时备份
+*.bak
+*.bak.*
+*.bak-runB-*
+*.bak.disable-*
+*.bak.fix-*
+
+# 大且可重装的运行产物
+.tmp
+.tmp/
+tmp
+tmp/
+plugins
+plugins/
+computer-use
+computer-use/
+vendor_imports
+vendor_imports/
+local-marketplaces
+local-marketplaces/
+
+# 机器指纹（跨机恢复时不应覆盖）
+installation_id
+.personality_migration
+process_manager
+process_manager/
+
+# 快照过程的临时残留
+*.partial
+*.partial/
+
+# macOS 系统文件
+.DS_Store
