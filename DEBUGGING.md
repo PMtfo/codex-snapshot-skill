@@ -198,4 +198,4 @@ user     | openai | 492
 - 官方仓库：https://github.com/openai/codex
 - 关键 issue：[#28068](https://github.com/openai/codex/issues/28068)、[#27363](https://github.com/openai/codex/issues/27363)、[#27159](https://github.com/openai/codex/issues/27159)、[#28549](https://github.com/openai/codex/issues/28549)、[#30107](https://github.com/openai/codex/issues/30107)、[#30042](https://github.com/openai/codex/issues/30042)、[#30028](https://github.com/openai/codex/issues/30028)
 - 同类工具：[Codex_Relay](https://github.com/Red-noblue/Codex_Relay)、[codex-history-sync-tool](https://github.com/GODGOD126/codex-history-sync-tool)、[pangkk18/codex-history-sync](https://github.com/pangkk18/codex-history-sync)
-- 配套：本仓库的 [ccc-syn-skill](skills/ccc-syn-skill/)
+- 配套：本仓库的 [ccc-syn-skill](skills/ccc-syn-skill/) 把 Cursor / Claude Code 对话导入 Codex

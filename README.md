@@ -23,7 +23,7 @@ OpenAI 的 Codex macOS 桌面应用（`/Applications/Codex.app`，v26.x 那一�
 | 工具 | 定位 | 跟本 skill 关系 |
 |---|---|---|
 | [Red-noblue/Codex_Relay](https://github.com/Red-noblue/Codex_Relay) | Tauri GUI 应用，跨设备打包 zip + 改 session_id resume | 跨设备场景比本 skill 强，但不解决换号 sidebar 隐藏问题 |
-| [ccc-syn-skill](skills/ccc-syn-skill/) | 把 Cursor / Claude Code 对话**导入** Codex | 本 skill 仓库 **已包含** ccc-syn-skill 作配套 |
+| ccc-syn-skill | 把 Cursor / Claude Code 对话**导入** Codex | 本 skill 仓库 **已包含** ccc-syn-skill 作配套 |
 | [pangkk18/codex-history-sync](https://github.com/pangkk18/codex-history-sync) 等 | 改 jsonl + sqlite 的 `model_provider` 字段让旧线程伪装成新 provider | 本 skill 的 `account-switch` 子命令是同样原理的成熟实现 |
 
 本 skill 的差异化价值：
@@ -55,7 +55,7 @@ bash ~/codex-snapshot-skill/install.sh
 ```
 codex-snapshot-skill/
 ├── README.md               ← 当前文档
-├── INSTALL.md              ← 详细安装/卸载/在别的电脑复现
+├── INSTALL.md              ← 详细安装/卸载/在别人电脑复现
 ├── DEBUGGING.md            ← 一晚上踩坑完整复盘 + 关键 GitHub issue 链接
 ├── install.sh              ← 一键安装(建 symlink + 校验依赖)
 ├── uninstall.sh            ← 卸载

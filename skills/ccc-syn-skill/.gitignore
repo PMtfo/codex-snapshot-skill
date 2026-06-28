@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 临时 / 运行时
+tmp/
+tmp_exec/
+*.log
+*.tmp
+
+# 本机敏感数据
+*.local.*
+.env
+.env.*
+secrets/
+*token*
+*cookie*
+*.sqlite
+*.sqlite-journal
+
+# 不应被 push 的本机 Codex 状态(运行时数据,各机器独立)
+ccc-syn-import-map.json
+external_agent_session_imports.json
+cursor-claude-bridge-map.json
+state_5.sqlite*
