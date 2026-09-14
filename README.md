@@ -119,3 +119,46 @@ codex-snapshot-skill/
 ## License
 
 私有仓库，自用。
+
+## 仓库结构
+
+当前受版本控制的文件共 37 个。仓库同时分发两套 Skill：`codex-snapshot`（本仓库主体）与内嵌的 `ccc-syn-skill`（跨端对话转录，独立仓库的同步副本）。
+
+```
+codex-snapshot-skill/
+├── install.sh                     校验依赖 + 在三端 skill 目录建 symlink
+├── uninstall.sh                   移除 symlink
+├── INSTALL.md                     安装 / 卸载 / 换机复现
+├── DEBUGGING.md                   排障记录
+├── README.md
+├── examples/config.example.toml   配置样例
+└── skills/
+    ├── codex-snapshot/       11   本仓库主 Skill
+    │   ├── SKILL.md               触发条件与操作流程
+    │   ├── README.md
+    │   ├── scripts/          8    snapshot / list / show / restore / delete /
+    │   │                          account_switch / _common.py / exclude.txt
+    │   └── tests/smoke.sh
+    └── ccc-syn-skill/        19   跨端转录 Skill 同步副本（见 ccc-syn-skill 仓库）
+```
+
+## 安装
+
+前置条件全部为 macOS 自带或已有组件，脚本只用 Python 标准库，无需 pip：
+
+| 项 | 要求 | 校验命令 |
+|---|---|---|
+| 操作系统 | macOS（Apple Silicon 或 Intel） | `uname -sm` |
+| Python | 3.10+（脚本本身 3.8+ 可跑） | `python3 --version` |
+| Codex.app | 已安装于 `/Applications/Codex.app`，任意 26.x | `ls /Applications/Codex.app` |
+| git | 任意版本 | `git --version` |
+| sqlite3 CLI | 系统自带 | `sqlite3 --version` |
+
+无 `gh` / `npm` / `brew` 强依赖，不需要 `zstd`（脚本用 gzip 压缩）。
+
+```bash
+git clone git@github.com:PMtfo/codex-snapshot-skill.git ~/codex-snapshot-skill
+bash ~/codex-snapshot-skill/install.sh
+```
+
+`install.sh` 会校验依赖，并在 Claude Code / Codex / Cursor 三处 skill 目录建立指向本仓库 `skills/codex-snapshot/` 的 symlink，因此三端共用同一份实现，更新仓库即三端同步。
