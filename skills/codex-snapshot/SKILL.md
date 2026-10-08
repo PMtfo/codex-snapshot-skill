@@ -104,7 +104,7 @@ python3 $SS/account_switch.py finish  [--title-from <ver>]
 >
 > **第二步**(收尾,等你重启完 Codex 跑):
 > - UPDATE thread_source NULL → 'user'
-> - UPDATE 残留的 cato/旧 provider → openai
+> - UPDATE 残留的非目标 provider → openai
 > - 从保险快照 merge title 列(让标题回到 LLM 总结版,不是 first_user_message)
 >
 > 跑完后请重启 Codex 验证 sidebar 是否完整。"

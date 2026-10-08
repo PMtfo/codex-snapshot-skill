@@ -10,7 +10,7 @@
 | 2 | 改 sqlite 的 `thread_source` 字段让它变 'user' | sqlite 是从 jsonl backfill 出来的，每次 Codex 启动会覆盖 | 改 jsonl 第一行 session_meta，让 backfill 写出对的值 |
 | 3 | restore 时把 v1 快照里的 `state_5.sqlite` 写回 | 旧账号 A 的 sqlite 写到新账号 B 环境会"半生不熟" | restore 永远跳过 state_5.sqlite，让 Codex 自己 backfill |
 | 4 | 以为 `thread_source=NULL` 是能显示的 | 测了 1 条 NULL 还是不显示，结论反了 | 实际是 `thread_source='user'` 才显示 |
-| 5 | finish 只清扫 my_proxy | Codex 重启后又用了一会儿，新 thread 还是 NULL，或者 jsonl 后续 turn 里有别的 provider | finish 改为可重复跑 + UPDATE 所有非目标 provider |
+| 5 | finish 只清扫单一 provider | Codex 重启后又用了一会儿，新 thread 还是 NULL，或者 jsonl 后续 turn 里有别的 provider | finish 改为可重复跑 + UPDATE 所有非目标 provider |
 
 完整时间线如下。
 
@@ -28,7 +28,7 @@
 
 **追因**：
 - 截图显示左侧"项目周报"等分组在，但下面"暂无对话"
-- 数据明明在 sqlite 里（`SELECT count(*) FROM threads WHERE cwd='/Users/you/Documents/项目周报'` = 8）
+- 数据明明在 sqlite 里（`SELECT count(*) FROM threads WHERE cwd='/Users/you/my-project'` = 8）
 - 但 Codex.app 不显示
 
 ---
@@ -37,7 +37,7 @@
 
 **假设 A**：是 `model_provider` 过滤导致
 
-实测 sqlite 里 thread.model_provider = `my_proxy`（账号 A 时期公司 API），但 B 账号 config.toml 里没这个 provider 配置，sidebar UI 按 model_provider 过滤把它们隐藏了。
+实测 sqlite 里 thread.model_provider = `my_proxy`（账号 A 时期用的第三方网关），但 B 账号 config.toml 里没这个 provider 配置，sidebar UI 按 model_provider 过滤把它们隐藏了。
 
 **操作**：UPDATE threads SET model_provider='openai' WHERE model_provider='my_proxy'。
 
@@ -55,7 +55,7 @@
 
 把所有 jsonl 第一行 `session_meta.payload.model_provider` 从 my_proxy 改为 openai。
 
-**结果**：Codex 启动后 sqlite 还是被改回 cato。原因：Codex backfill 不仅看 session_meta 第一行，还扫整个 jsonl 找 model_provider，最后一次出现的会覆盖第一行的。
+**结果**：Codex 启动后 sqlite 还是被改回 my_proxy。原因：Codex backfill 不仅看 session_meta 第一行，还扫整个 jsonl 找 model_provider，最后一次出现的会覆盖第一行的。
 
 ---
 

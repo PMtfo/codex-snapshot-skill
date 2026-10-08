@@ -33,6 +33,7 @@ class PlanBDryRunTest(unittest.TestCase):
             )
 
             env = os.environ.copy()
+            env["HOME"] = str(root / "home")
             env["CCC_CURSOR_PROJECTS_DIR"] = str(cursor_projects_dir)
             env["CCC_CURSOR_STATE_DB"] = str(root / "missing-state.vscdb")
             env["CODEX_HOME"] = str(codex_home)

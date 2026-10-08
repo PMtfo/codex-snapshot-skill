@@ -19,7 +19,7 @@
 # ============================================================
 # 选 2. 公司内部 Model 平台(示例,把下面块去掉注释启用)
 # ============================================================
-# 这个 provider 会让 Codex 走 https://your-gateway.example.com/v1 的 OpenAI 兼容 API,
+# 这个 provider 会让 Codex 走自建/第三方网关的 OpenAI 兼容 API,
 # 用 experimental_bearer_token 做认证, 完全绕过 OpenAI 官方 OAuth。
 # (注意: 本示例的 token 是随机假值, 用你自己的)
 
@@ -29,7 +29,7 @@
 # disable_response_storage = true
 # model_context_window = 1000000
 # model_auto_compact_token_limit = 900000
-# model_catalog_json = "/Users/you/.codex/my-model-catalog.json"
+# model_catalog_json = "~/.codex/my-model-catalog.json"
 #
 # [model_providers.my_proxy]
 # base_url = "https://your-gateway.example.com/v1"
@@ -104,5 +104,5 @@ HTTP_PROXY = "http://proxy-aws-us.example.com:8118"
 # ============================================================
 # - account-switch 工具会改 sessions/*.jsonl 第一行的 model_provider,
 #   要跟这里的 model_provider 字段保持一致(默认 'openai')。
-# - 如果你切回公司 Model 平台 (my_proxy), 记得 account-switch
+# - 如果你切回自定义 provider (my_proxy), 记得 account-switch
 #   时传 `--provider my_proxy` 让 jsonl 和 sqlite 都对齐。

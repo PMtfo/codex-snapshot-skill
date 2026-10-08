@@ -48,7 +48,7 @@ NOISE_TITLE_RE = re.compile(
 NOISE_KEYWORD_RE = re.compile(r"(测网速|测速|网络测试|连接性测试|连通性测试|测试连接|测试网络|ping\s*测试)", re.I)
 NOISE_CONTEXT_RE = re.compile(r"(synctest|只回复\s*ok|只输出\s*ok|回复一个字|aws_bedrock_ok|^insights\s*/insights$)", re.I)
 
-sys.path.insert(0, str(HOME / ".cursor" / "agent-shared" / "skills" / "ccc-syn-skill" / "scripts"))
+sys.path.insert(0, str(ROOT / "scripts"))
 import codex_import as ci  # noqa: E402
 
 CODEX_CWD = ci._codex_project_cwd()

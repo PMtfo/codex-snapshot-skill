@@ -170,7 +170,7 @@ git push
 
 不会报错，但快照可能为空。skill 期望 `~/.codex/` 至少存在（Codex.app 启动登录一次就有），不需要里面有对话。
 
-### Q: 我用别的 provider（不是 OpenAI/my_proxy），跑 account-switch 怎么传？
+### Q: 我用别的 provider（不是 OpenAI 或自定义网关），跑 account-switch 怎么传？
 
 ```bash
 python3 .../account_switch.py prepare --provider my_custom_provider

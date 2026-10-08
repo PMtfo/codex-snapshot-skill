@@ -5,7 +5,7 @@ alwaysApply: true
 
 # ccc-syn 决策树
 
-当用户提到读取历史对话、加载会话、接着某个任务继续，或把对话导入 Codex 时，按下面决策树执行。脚本根目录：`/Users/you/.cursor/agent-shared/skills/ccc-syn-skill`。
+当用户提到读取历史对话、加载会话、接着某个任务继续，或把对话导入 Codex 时，按下面决策树执行。脚本根目录：`~/.cursor/agent-shared/skills/ccc-syn-skill`。
 
 ## 1. 先判断用户意图
 
@@ -21,9 +21,9 @@ alwaysApply: true
 命令：
 
 ```bash
-python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/cursor_transcript.py search "<标题或关键词或uuid>" --limit 5
-python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/claude_transcript.py search "<标题或关键词或session-id>" --limit 5
-python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/codex_transcript.py  search "<标题或关键词或session-id>" --limit 5
+python3 ~/.cursor/agent-shared/skills/ccc-syn-skill/scripts/cursor_transcript.py search "<标题或关键词或uuid>" --limit 5
+python3 ~/.cursor/agent-shared/skills/ccc-syn-skill/scripts/claude_transcript.py search "<标题或关键词或session-id>" --limit 5
+python3 ~/.cursor/agent-shared/skills/ccc-syn-skill/scripts/codex_transcript.py  search "<标题或关键词或session-id>" --limit 5
 ```
 
 唯一强命中后 load；多个候选先让用户选择。不要把 `<...>` 占位符原样执行。
@@ -43,11 +43,11 @@ python3 /Users/you/.cursor/agent-shared/skills/ccc-syn-skill/scripts/codex_trans
 唯一推荐入口（Codex 必须完全退出后才能真实导入；dry-run 可直接跑）：
 
 ```bash
-cd /Users/you/.cursor/agent-shared/skills/ccc-syn-skill
-python3 codex-import/codex-planB-run.py dry-run --source cursor --since 7d --incremental --codex-cwd "/Users/you/Desktop/Codex"
-python3 codex-import/codex-planB-run.py import --source cursor --since 7d --incremental --codex-cwd "/Users/you/Desktop/Codex"
-python3 codex-import/codex-planB-run.py import --source claude --incremental --codex-cwd "/Users/you/Desktop/Codex"
-python3 codex-import/codex-planB-run.py all --source both --codex-cwd "/Users/you/Desktop/Codex"
+cd ~/.cursor/agent-shared/skills/ccc-syn-skill
+python3 codex-import/codex-planB-run.py dry-run --source cursor --since 7d --incremental --codex-cwd "$HOME/Desktop/Codex"
+python3 codex-import/codex-planB-run.py import --source cursor --since 7d --incremental --codex-cwd "$HOME/Desktop/Codex"
+python3 codex-import/codex-planB-run.py import --source claude --incremental --codex-cwd "$HOME/Desktop/Codex"
+python3 codex-import/codex-planB-run.py all --source both --codex-cwd "$HOME/Desktop/Codex"
 ```
 
 导入语义：复用原端标题；按源更新时间从旧到新提交，Codex 侧栏倒序显示时新对话在上；过滤 `1`、`测试`、`你好1`、`请回复ok`、`ping`、测网速/连接性测试等低价值记录。
